@@ -1,380 +1,93 @@
-// ========================================
-// SYNTRAXS HOSPITAL - APPOINTMENT SYSTEM
-// ========================================
+const depts=[
+['General Medicine','🩺','Everyday health, checkups and chronic care.'],['Cardiology','💙','Heart health, diagnostics and cardiac care.'],['Neurology','🧠','Brain, spine and nervous system care.'],['Orthopedics','🦴','Bone, joint, sports and mobility care.'],['Pediatrics','🧸','Thoughtful care for infants and children.'],['Obstetrics & Gynecology','🌸','Women’s health, maternity and wellness.'],['Oncology','🎗️','Cancer diagnosis and multidisciplinary care.'],['Dermatology','✨','Skin, hair and nail health.'],['Ophthalmology','👁️','Vision, eye health and treatment.'],['ENT','👂','Ear, nose and throat care.'],['Psychiatry','🧩','Mental wellness and psychiatric support.'],['Gastroenterology','🫁','Digestive health, liver and gut care.'],['Pulmonology','🌬️','Lung health and breathing conditions.'],['Nephrology','💧','Kidney health and renal care.'],['Urology','➕','Urinary tract and men’s health.'],['Endocrinology','⚖️','Hormones, thyroid and diabetes care.'],['Dentistry','🦷','Preventive, restorative and oral care.'],['Emergency & Trauma','🚑','Urgent assessment and emergency treatment.'],['Radiology & Imaging','🔬','Diagnostic imaging and scan services.'],['Pathology & Laboratory','🧪','Lab tests and diagnostic services.'],['Anesthesiology','💉','Anesthesia, pain and perioperative care.'],['Physiotherapy & Rehab','🏃','Recovery, movement and rehabilitation.'],['Infectious Diseases','🦠','Complex infections and antimicrobial care.'],['Plastic & Reconstructive Surgery','🩹','Reconstructive and specialist surgical care.']
+];
+const firstNames=['Aarav','Meera','Arjun','Ananya','Rohan','Ishita','Kabir','Diya','Vihaan','Sana','Aditya','Nisha','Karan','Priya','Rahul','Aditi','Dev','Mira','Neil','Tara','Ibrahim','Kavya','Vikram','Leena'];
+const surnames=['Sharma','Reddy','Mehta','Rao','Kapoor','Nair','Iyer','Patel','Malhotra','Desai','Kulkarni','Chowdhury'];
+const qualifications=['MD, DM','MBBS, MD','MBBS, MS','MD, DNB','MBBS, Fellowship'];
+const bios=['Known for a clear, patient-first approach and evidence-based treatment plans.','Combines specialist expertise with thoughtful communication and collaborative care.','Focused on accurate diagnosis, personalized treatment, and long-term wellbeing.'];
+const slots=['Mon–Fri · 9:00 AM–2:00 PM','Mon–Sat · 10:00 AM–4:00 PM','Tue–Sat · 11:00 AM–6:00 PM'];
+const doctors=[];depts.forEach((d,i)=>{for(let j=0;j<3;j++){let idx=i*3+j;let name='Dr. '+firstNames[idx%firstNames.length]+' '+surnames[(idx*3+j+i)%surnames.length];doctors.push({id:idx+1,name,dept:d[0],qual:qualifications[(i+j)%qualifications.length],exp:6+((i*3+j*5)%19),fee:600+((i*3+j)%5)*150,slot:slots[(i+j)%slots.length],bio:bios[(i+j)%bios.length],languages:['English','Hindi',j===1?'Telugu':'Telugu'][0]+(j===2?', Hindi':''),education:['AIIMS New Delhi','NIMS Hyderabad','Christian Medical College, Vellore','JIPMER Puducherry'][(i+j)%4],registration:'SYN-MED-'+String(1000+idx),avatar:(firstNames[idx%firstNames.length][0]+surnames[(idx*3+j+i)%surnames.length][0]),rating:(4.7+((i+j)%3)*.1).toFixed(1),patients:900+idx*73,icon:d[1]})}});
+let currentDoctor=null,selectedDept='all',lastReceipt=null;
+function money(n){return '₹'+Number(n).toLocaleString('en-IN')}
+function deptCard(d,compact=false){return `<button class="dept ${selectedDept===d[0]?'selected':''}" onclick="chooseDept('${d[0].replace(/'/g,"\\'")}')"><div class="depticon">${d[1]}</div><h3>${d[0]}</h3><p>${d[2]}</p><span class="count">3 SPECIALISTS · VIEW TEAM →</span></button>`}
+function doctorCard(d){return `<article class="doctor"><div class="doctor-top"><div class="avatar">${d.avatar}</div><span class="available">● AVAILABLE</span></div><div class="doctor-body"><h3>${d.name}</h3><div class="role">${d.dept}</div><p class="bio">${d.qual} · ${d.exp} years of experience. ${d.bio}</p><div class="tags"><span class="tag">★ ${d.rating}</span><span class="tag">${d.exp}+ yrs exp.</span><span class="tag">${d.education}</span></div><div class="docfoot"><div class="fee">${money(d.fee)}<small>Consultation fee</small></div><button class="primary" onclick="showDoctor(${d.id})">View profile ↗</button></div></div></article>`}
+function renderHome(){document.getElementById('homeDepts').innerHTML=depts.slice(0,8).map(d=>deptCard(d,true)).join('');document.getElementById('homeDoctors').innerHTML=doctors.slice(0,3).map(doctorCard).join('')}
+function renderDirectory(){const q=(document.getElementById('searchInput')?.value||'').toLowerCase();const dept=document.getElementById('deptFilter')?.value||'all';const sort=document.getElementById('sortFilter')?.value||'name';document.getElementById('allDepts').innerHTML=depts.filter(d=>(dept==='all'||d[0]===dept)&&(!q||d[0].toLowerCase().includes(q)||d[2].toLowerCase().includes(q))).map(d=>deptCard(d)).join('');let arr=doctors.filter(d=>(dept==='all'||d.dept===dept)&&(selectedDept==='all'||d.dept===selectedDept)&&(!q||[d.name,d.dept,d.qual,d.education].join(' ').toLowerCase().includes(q)));if(sort==='fee')arr.sort((a,b)=>a.fee-b.fee);else if(sort==='experience')arr.sort((a,b)=>b.exp-a.exp);else arr.sort((a,b)=>a.name.localeCompare(b.name));document.getElementById('allDoctors').innerHTML=arr.length?arr.map(doctorCard).join(''):'<div class="empty">No matches found. Try another search or department.</div>'}
+function chooseDept(name){selectedDept=selectedDept===name?'all':name;document.getElementById('deptFilter').value=selectedDept;go('departments');renderDirectory();document.getElementById('allDoctors').scrollIntoView({behavior:'smooth',block:'start'})}
+function showDoctor(id){currentDoctor=doctors.find(d=>d.id===id);if(!currentDoctor)return;const d=currentDoctor;document.getElementById('profileContent').innerHTML=`<div class="panel"><div class="profilehead"><div class="bigavatar">${d.avatar}</div><div style="flex:1"><div class="eyebrow">${d.icon} ${d.dept}</div><h1>${d.name}</h1><p>${d.qual} · ${d.exp} years of clinical experience</p><div class="tags"><span class="tag">★ ${d.rating} patient rating</span><span class="tag">${d.patients.toLocaleString('en-IN')}+ consultations</span><span class="tag">Verified profile</span></div></div><div><div class="fee" style="font-size:25px">${money(d.fee)}<small>Consultation fee</small></div><button class="primary" style="margin-top:12px" onclick="bookDoctor(${d.id})">Book appointment →</button></div></div></div><div class="profilegrid"><section class="panel"><h3>About the doctor</h3><p style="color:var(--muted)">${d.bio} Dr. ${d.name.replace('Dr. ','')} works closely with patients and care teams to support informed decisions and a personalized care plan.</p><div class="infoitem"><small>Specialty</small><strong>${d.dept}</strong></div><div class="infoitem"><small>Qualifications</small><strong>${d.qual}</strong></div><div class="infoitem"><small>Medical education</small><strong>${d.education}</strong></div><div class="infoitem"><small>Registration ID</small><strong>${d.registration}</strong></div><div class="infoitem"><small>Languages</small><strong>${d.languages}</strong></div><div class="infoitem"><small>Clinical experience</small><strong>${d.exp} years</strong></div><div class="infoitem"><small>Consultation hours</small><strong>${d.slot}</strong></div></section><aside class="bookbox"><h3>Book a consultation</h3><p class="smallmuted">Choose a preferred date and visit type.</p><div class="field"><label>Appointment date</label><input id="apptDate" type="date" min="${new Date().toISOString().slice(0,10)}"></div><div class="field"><label>Visit type</label><select id="apptType"><option>In-person consultation</option><option>Video consultation (demo)</option><option>Follow-up visit</option></select></div><div class="field"><label>Patient name</label><input id="apptName" placeholder="Your full name"></div><button class="primary" style="width:100%" onclick="bookDoctor(${d.id})">Continue to billing · ${money(d.fee)}</button><p class="smallmuted">Appointment and doctor information shown here are sample prototype data.</p></aside></div>`;go('profile')}
+function bookDoctor(id){const d=doctors.find(x=>x.id===id);currentDoctor=d;const name=document.getElementById('apptName')?.value||'';document.getElementById('patientName').value=name;document.getElementById('billDoctor').value=String(d.id);document.getElementById('billService').value='consult';updateBill();go('billing')}
+function updateBill(){const prices={consult:800,lab:1250,scan:2200,room:3500,pharmacy:650,custom:1000};const base=prices[document.getElementById('billService').value]||800;const did=Number(document.getElementById('billDoctor').value);const doc=doctors.find(d=>d.id===did);const service=doc&&document.getElementById('billService').value==='consult'?doc.fee:base;const facility=100;const extra=Math.max(0,Number(document.getElementById('extraCharge').value)||0);const tax=Math.round((service+facility+extra)*.05);document.getElementById('servicePrice').textContent=money(service);document.getElementById('facilityPrice').textContent=money(facility);document.getElementById('extraPrice').textContent=money(extra);document.getElementById('taxPrice').textContent=money(tax);document.getElementById('totalPrice').textContent=money(service+facility+extra+tax)}
+function payBill(){const name=document.getElementById('patientName').value.trim();if(!name){document.getElementById('patientName').focus();alert('Please enter the patient name to continue.');return}const total=document.getElementById('totalPrice').textContent;const service=document.getElementById('billService').selectedOptions[0].text;const doctorId=Number(document.getElementById('billDoctor').value);const doc=doctors.find(d=>d.id===doctorId);lastReceipt={name,id:document.getElementById('patientId').value||'SYN-'+Math.floor(10000+Math.random()*89999),total,service,doctor:doc?doc.name:'Not specified',method:document.getElementById('payMethod').value,date:new Date().toLocaleString('en-IN')};document.getElementById('receiptDetails').innerHTML=`<div class="billrow"><span>Receipt reference</span><strong>${lastReceipt.id}</strong></div><div class="billrow"><span>Patient</span><strong>${escapeHTML(name)}</strong></div><div class="billrow"><span>Service</span><strong>${service}</strong></div><div class="billrow"><span>Doctor</span><strong>${doc?doc.name:'Not specified'}</strong></div><div class="billrow"><span>Payment method</span><strong>${lastReceipt.method}</strong></div><div class="billrow"><span>Date</span><strong>${lastReceipt.date}</strong></div><div class="billrow"><span>Total</span><span class="total">${total}</span></div>`;go('receipt')}
+function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function go(page){const pages={home:'homePage',departments:'directoryPage',doctors:'directoryPage',profile:'profilePage',billing:'billingPage',receipt:'receiptPage'};Object.values(pages).forEach(id=>document.getElementById(id).classList.add('hide'));document.getElementById(pages[page]||'homePage').classList.remove('hide');document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===page||(page==='profile'&&b.dataset.nav==='doctors')));if(page==='departments'||page==='doctors'){document.getElementById('directoryTitle').textContent=page==='departments'?'Departments & specialists':'Meet our doctors';if(page==='doctors')selectedDept='all';document.getElementById('deptFilter').value=selectedDept;renderDirectory()}if(page==='billing')updateBill();window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.nav)));depts.forEach(d=>{const o=document.createElement('option');o.value=d[0];o.textContent=d[0];document.getElementById('deptFilter').appendChild(o)});doctors.forEach(d=>{const o=document.createElement('option');o.value=d.id;o.textContent=d.name+' — '+d.dept;document.getElementById('billDoctor').appendChild(o)});document.getElementById('billDoctor').addEventListener('change',updateBill);document.getElementById('billService').addEventListener('change',updateBill);renderHome();updateBill();
 
-let appointments = [];
+function go(page) {
+  const pages = {
+    home: 'homePage',
+    departments: 'directoryPage',
+    doctors: 'directoryPage',
+    appointments: 'appointmentsPage',
+    profile: 'profilePage',
+    billing: 'billingPage',
+    receipt: 'receiptPage'
+  };
 
-try {
-    appointments = JSON.parse(localStorage.getItem("syntaxsAppointments")) || [];
-} catch (error) {
-    appointments = [];
-}
+  // Hide all pages
+  Object.values(pages).forEach(id => {
+    document.getElementById(id).classList.add('hide');
+  });
 
-const appointmentForm = document.getElementById("appointmentForm");
-const successMessage = document.getElementById("successMessage");
-const confirmationText = document.getElementById("confirmationText");
-const appointmentsList = document.getElementById("appointmentsList");
+  // Show selected page
+  document.getElementById(pages[page] || 'homePage')
+    .classList.remove('hide');
 
-if (appointmentForm) {
-    appointmentForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        const patientName = document.getElementById("patientName").value.trim();
-        const doctor = document.getElementById("doctorSelect").value;
-        const problem = document.getElementById("problem").value.trim();
-        const date = document.getElementById("date").value;
-        const time = document.getElementById("time").value;
-
-        if (!patientName || !doctor || !problem || !date || !time) {
-            alert("Please fill in all appointment details.");
-            return;
-        }
-
-        const formattedDate = new Date(date + "T00:00:00").toLocaleDateString("en-IN", {
-            day: "2-digit", month: "long", year: "numeric"
-        });
-
-        const newAppointment = {
-            id: Date.now(),
-            patientName,
-            doctor,
-            problem,
-            date: formattedDate,
-            time,
-            status: "Confirmed"
-        };
-
-        appointments.push(newAppointment);
-        saveAppointments();
-
-        if (successMessage) successMessage.classList.add("show");
-        if (confirmationText) {
-            confirmationText.textContent = "Appointment for " + patientName +
-                " with " + doctor + " has been booked successfully.";
-        }
-
-        displayAppointments();
-        appointmentForm.reset();
-
-        if (successMessage) {
-            successMessage.scrollIntoView({ behavior: "smooth", block: "center" });
-        }
-    });
-}
-
-function saveAppointments() {
-    try {
-        localStorage.setItem("syntaxsAppointments", JSON.stringify(appointments));
-    } catch (error) {
-        console.error("Could not save appointments:", error);
-        alert("Your browser could not save the appointment. Please check browser storage settings.");
-    }
-}
-
-function displayAppointments() {
-    if (!appointmentsList) return;
-
-    if (appointments.length === 0) {
-        appointmentsList.innerHTML = `
-            <div class="empty-appointments">
-                <div class="empty-icon">📅</div>
-                <h3>No Appointments Yet</h3>
-                <p>Book an appointment and it will appear here.</p>
-                <a href="#book" class="btn primary">Book Appointment</a>
-            </div>`;
-        return;
-    }
-
-    appointmentsList.innerHTML = "";
-    appointments.forEach(function (appointment, index) {
-        const card = document.createElement("div");
-        card.className = "appointment-card";
-        card.innerHTML = `
-            <div class="appointment-top">
-                <span class="appointment-number">APPOINTMENT #${index + 1}</span>
-                <span class="appointment-status">${escapeHTML(appointment.status || "Confirmed")}</span>
-            </div>
-            <h3>${escapeHTML(appointment.patientName)}</h3>
-            <p class="appointment-doctor">${escapeHTML(appointment.doctor)}</p>
-            <div class="appointment-detail"><span>Date</span><strong>${escapeHTML(appointment.date)}</strong></div>
-            <div class="appointment-detail"><span>Time</span><strong>${escapeHTML(appointment.time)}</strong></div>
-            <div class="problem-text"><strong>Patient Problem</strong><br><br>${escapeHTML(appointment.problem)}</div>
-            <button class="cancel-btn" type="button" onclick="cancelAppointment(${Number(appointment.id)})">Cancel Appointment</button>`;
-        appointmentsList.appendChild(card);
-    });
-}
-
-function cancelAppointment(id) {
-    if (!confirm("Are you sure you want to cancel this appointment?")) return;
-    appointments = appointments.filter(function (appointment) {
-        return Number(appointment.id) !== Number(id);
-    });
-    saveAppointments();
-    displayAppointments();
-}
-
-function escapeHTML(value) {
-    const div = document.createElement("div");
-    div.textContent = String(value ?? "");
-    return div.innerHTML;
-}
-
-// ========================================
-// BILLING / PAYMENT FLOW (DEMO ONLY)
-// ========================================
-
-let returnHomeTimer = null;
-
-const billCard = document.querySelector(".bill-card");
-const billingPage = document.getElementById("billingPage");
-const paymentSuccess = document.getElementById("paymentSuccess");
-const paymentForm = document.getElementById("paymentForm");
-const paymentExtraFields = document.getElementById("paymentExtraFields");
-const billStatus = document.querySelector(".bill-status");
-const paymentMethods = document.querySelectorAll('input[name="paymentMethod"]');
-
-function openBillingPage() {
-    if (returnHomeTimer) { clearTimeout(returnHomeTimer); returnHomeTimer = null; }
-    if (billCard) billCard.hidden = true;
-    if (billingPage) billingPage.hidden = false;
-    if (paymentSuccess) paymentSuccess.hidden = true;
-    if (billingPage) billingPage.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-function closeBillingPage() {
-    if (billingPage) billingPage.hidden = true;
-    if (billCard) billCard.hidden = false;
-    if (billCard) billCard.scrollIntoView({ behavior: "smooth", block: "center" });
-}
-
-paymentMethods.forEach(function (radio) {
-    radio.addEventListener("change", function () {
-        if (!paymentExtraFields) return;
-        const method = radio.value;
-        if (method === "UPI") {
-            paymentExtraFields.innerHTML = `
-                <label for="upiId">UPI ID (optional for this demo)</label>
-                <input id="upiId" type="text" placeholder="name@bank">`;
-        } else if (method === "Card") {
-            paymentExtraFields.innerHTML = `
-                <label for="cardName">Demo cardholder name</label>
-                <input id="cardName" type="text" autocomplete="off" placeholder="Enter a test name">
-                <label for="cardNumber">Demo card number</label>
-                <input id="cardNumber" type="text" inputmode="numeric" autocomplete="off" maxlength="19" placeholder="Use any 16 digits for this demo">
-                <small class="payment-note">Do not enter real card details. This demo does not contact a bank.</small>`;
-        } else {
-            paymentExtraFields.innerHTML = `
-                <p class="cash-info">You selected cash. In a real hospital, payment would be completed at the billing counter.</p>`;
-        }
-    });
-});
-
-if (paymentForm) {
-    paymentForm.addEventListener("submit", function (event) {
-        event.preventDefault();
-        const selected = document.querySelector('input[name="paymentMethod"]:checked');
-        if (!selected) {
-            alert("Please select UPI, Card, or Cash.");
-            return;
-        }
-
-        // Validate demo fields only; no real payment details are sent or charged.
-        const method = selected.value;
-        if (method === "UPI") {
-            const upiInput = document.getElementById("upiId");
-            const upiValue = upiInput ? upiInput.value.trim() : "";
-            if (upiValue && !/^[A-Za-z0-9._-]{2,}@[A-Za-z0-9.-]{2,}$/.test(upiValue)) {
-                alert("Please enter a valid demo UPI ID (for example, name@bank) or leave it blank.");
-                if (upiInput) upiInput.focus();
-                return;
-            }
-        }
-        if (method === "Card") {
-            const cardNameInput = document.getElementById("cardName");
-            const cardNumberInput = document.getElementById("cardNumber");
-            const cardName = cardNameInput ? cardNameInput.value.trim() : "";
-            const cardNumber = cardNumberInput ? cardNumberInput.value.replace(/\\s+/g, "") : "";
-            if (!cardName) {
-                alert("Please enter a demo cardholder name.");
-                if (cardNameInput) cardNameInput.focus();
-                return;
-            }
-            if (!/^\\d{16}$/.test(cardNumber)) {
-                alert("For this demo, enter exactly 16 digits (not a real card number).");
-                if (cardNumberInput) cardNumberInput.focus();
-                return;
-            }
-        }
-
-        // This is a front-end demonstration only; no money is charged.
-        try {
-            localStorage.setItem("syntaxsBillPayment", JSON.stringify({
-                amount: 2300,
-                method: method,
-                status: "Demo payment recorded",
-                date: new Date().toISOString()
-            }));
-        } catch (error) {
-            console.warn("Payment demo status could not be saved.", error);
-        }
-
-        if (billStatus) {
-            billStatus.textContent = method === "Cash" ? "CASH SELECTED" : "PAID (DEMO)";
-        }
-        if (billCard) billCard.hidden = true;
-        if (billingPage) billingPage.hidden = true;
-        if (paymentSuccess) paymentSuccess.hidden = false;
-
-        const successText = document.getElementById("paymentSuccessText");
-        const successTitle = paymentSuccess ? paymentSuccess.querySelector("h3") : null;
-        if (successTitle) successTitle.textContent = method === "Cash" ? "Cash Payment Selected" : "Payment Successful!";
-        if (successText) {
-            successText.textContent = method === "Cash"
-                ? "Please pay ₹2,300 at the hospital billing counter. Cash has not been collected or verified."
-                : "Your ₹2,300 " + method + " selection was recorded in this demo. No real payment was processed and no money was charged.";
-        }
-
-        if (paymentSuccess) paymentSuccess.scrollIntoView({ behavior: "smooth", block: "center" });
-        if (returnHomeTimer) clearTimeout(returnHomeTimer);
-        returnHomeTimer = window.setTimeout(returnHomeNow, 4000);
-    });
-}
-
-function returnHomeNow() {
-    if (returnHomeTimer) { clearTimeout(returnHomeTimer); returnHomeTimer = null; }
-    if (paymentSuccess) paymentSuccess.hidden = true;
-    if (billingPage) billingPage.hidden = true;
-    if (billCard) billCard.hidden = false;
-    if (paymentForm) paymentForm.reset();
-    const extraFields = document.getElementById("paymentExtraFields");
-    if (extraFields) extraFields.innerHTML = "";
-    window.location.hash = "home";
-    const home = document.getElementById("home");
-    if (home) home.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-// Prevent selecting dates in the past, using the browser's local date.
-const dateInput = document.getElementById("date");
-if (dateInput) {
-    const now = new Date();
-    const localToday = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
-        .toISOString().split("T")[0];
-    dateInput.min = localToday;
-}
-
-displayAppointments();
-
-
-
-// ========================================
-// DOCTOR CAROUSEL: SEAMLESS AUTO-SCROLL
-// Pauses when the visitor interacts with it.
-// ========================================
-(function initDoctorAutoScroll() {
-    const scroller = document.querySelector(".doctor-scroller");
-    if (!scroller || scroller.dataset.autoScrollReady === "true") return;
-
-    const reduceMotion = window.matchMedia &&
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion) return;
-
-    const originalCards = Array.from(scroller.children);
-    if (originalCards.length < 2) return;
-
-    // Duplicate the original cards once to create a seamless looping track.
-    originalCards.forEach((card) => {
-        const clone = card.cloneNode(true);
-        clone.setAttribute("aria-hidden", "true");
-        clone.querySelectorAll("[id]").forEach((node) => node.removeAttribute("id"));
-        scroller.appendChild(clone);
-    });
-
-    scroller.dataset.autoScrollReady = "true";
-    scroller.setAttribute("aria-label", "Doctors. Scroll or swipe to browse specialists.");
-    scroller.setAttribute("tabindex", "0");
-
-    let paused = false;
-    let frameId = null;
-    let previousTime = 0;
-    const speed = 28; // pixels per second
-
-    const pause = () => { paused = true; };
-    const resume = () => { paused = false; };
-
-    scroller.addEventListener("mouseenter", pause);
-    scroller.addEventListener("mouseleave", resume);
-    scroller.addEventListener("focusin", pause);
-    scroller.addEventListener("focusout", resume);
-    scroller.addEventListener("touchstart", pause, { passive: true });
-    scroller.addEventListener("touchend", () => {
-        window.setTimeout(resume, 1200);
-    }, { passive: true });
-    scroller.addEventListener("pointerdown", pause);
-    scroller.addEventListener("pointerup", () => {
-        window.setTimeout(resume, 1200);
-    });
-
-    function animate(time) {
-        if (!previousTime) previousTime = time;
-        const elapsed = Math.min((time - previousTime) / 1000, 0.05);
-        previousTime = time;
-
-        if (!paused) {
-            scroller.scrollLeft += speed * elapsed;
-
-            // Half the content is the original cards; reset at the duplicate boundary.
-            const loopPoint = scroller.scrollWidth / 2;
-            if (loopPoint > 0 && scroller.scrollLeft >= loopPoint) {
-                scroller.scrollLeft -= loopPoint;
-            }
-        }
-        frameId = window.requestAnimationFrame(animate);
-    }
-
-    frameId = window.requestAnimationFrame(animate);
-
-    // Stop the animation when the page is hidden to save resources.
-    document.addEventListener("visibilitychange", () => {
-        if (document.hidden) {
-            if (frameId) window.cancelAnimationFrame(frameId);
-            frameId = null;
-        } else if (!frameId) {
-            previousTime = 0;
-            frameId = window.requestAnimationFrame(animate);
-        }
-    });
-})();
-
-
-
-// ========================================
-// PAGE REVEAL MOTION: smooth entrance on scroll
-// Content remains visible if IntersectionObserver is unavailable.
-// ========================================
-(function initScrollReveal() {
-    const reduceMotion = window.matchMedia &&
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion) return;
-
-    const revealTargets = document.querySelectorAll(
-        ".about-section, .doctors-section, .booking-section, .appointments-section, .bill-section, .booking-info, .booking-form, .bill-card"
+  // Update active navigation
+  document.querySelectorAll('[data-nav]').forEach(button => {
+    button.classList.toggle(
+      'active',
+      button.dataset.nav === page ||
+      (page === 'profile' && button.dataset.nav === 'doctors')
     );
-    if (!revealTargets.length || !("IntersectionObserver" in window)) return;
+  });
 
-    revealTargets.forEach((element, index) => {
-        element.classList.add("scroll-reveal");
-        element.style.setProperty("--reveal-delay", `${(index % 3) * 90}ms`);
+  if (page === 'departments' || page === 'doctors') {
+    document.getElementById('directoryTitle').textContent =
+      page === 'departments'
+        ? 'Departments & specialists'
+        : 'Meet our doctors';
+
+    if (page === 'doctors') {
+      // Reset filters to show every doctor
+      selectedDept = 'all';
+      document.getElementById('searchInput').value = '';
+      document.getElementById('deptFilter').value = 'all';
+      document.getElementById('sortFilter').value = 'name';
+    } else {
+      document.getElementById('deptFilter').value = selectedDept;
+    }
+
+    renderDirectory();
+  }
+
+  if (page === 'appointments') {
+    renderAppointments();
+  }
+
+  if (page === 'billing') {
+    updateBill();
+  }
+
+  // Scroll to the doctor list when Our Doctors is clicked
+  if (page === 'doctors') {
+    document.getElementById('allDoctors').scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
     });
-    document.documentElement.classList.add("motion-ready");
-
-    const observer = new IntersectionObserver((entries, activeObserver) => {
-        entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("is-visible");
-                activeObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.12, rootMargin: "0px 0px -35px 0px" });
-
-    revealTargets.forEach((element) => observer.observe(element));
-})();
+  } else {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+}
