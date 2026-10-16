@@ -1,763 +1,284 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Syntraxs Hospital</title>
-
-    <link rel="stylesheet" href="medical.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Syntraxs Hospital</title>
+  <link rel="stylesheet" href="medical.css">
 </head>
-
 <body>
+  <div class="app">
+    <header class="nav">
+      <div class="brand">
+        <div class="logo">✚</div>
+        <div>syntraxs <span>hospital</span></div>
+      </div>
 
-    <!-- Navigation Bar -->
-    <header class="navbar">
+      <nav class="navlinks">
+        <button class="active" data-nav="home">Home</button>
+        <button data-nav="departments">Departments</button>
+        <button data-nav="doctors">Our Doctors</button>
+        <button data-nav="appointments">Appointments</button>
+        <button data-nav="billing">Billing</button>
+      </nav>
 
-        <div class="logo">
-            SYN<span>TRA</span>XS
-        </div>
-
-        <nav>
-            <a href="#home" class="nav-link active">Home</a>
-            <a href="#book" class="nav-link">Book Appointment</a>
-            <a href="#doctors" class="nav-link">Doctors</a>
-            <a href="#appointments" class="nav-link">View Appointments</a>
-            <a href="#bill" class="nav-link">Bill</a>
-        </nav>
-
+      <button class="primary" onclick="go('appointments')">
+        Book appointment ↗
+      </button>
     </header>
 
-    <!-- Scrolling welcome and hospital announcements -->
-    <div class="announcement-bar" role="region" aria-label="Hospital announcements">
-        <span class="announcement-label">SYNTRAXS UPDATE</span>
-        <div class="announcement-window">
-            <div class="announcement-track">
-                <div class="announcement-group">
-                    <span>☀ Good morning! Have a great day!</span>
-                    <span class="announcement-dot">✦</span>
-                    <span>Check out our expert doctors and specialties.</span>
-                    <span class="announcement-dot">✦</span>
-                    <span>Book your appointment with ease.</span>
-                    <span class="announcement-dot">✦</span>
-                    <span>Your health and well-being are our priority.</span>
-                    <span class="announcement-dot">✦</span>
-                </div>
-                <div class="announcement-group" aria-hidden="true">
-                    <span>☀ Good morning! Have a great day!</span>
-                    <span class="announcement-dot">✦</span>
-                    <span>Check out our expert doctors and specialties.</span>
-                    <span class="announcement-dot">✦</span>
-                    <span>Book your appointment with ease.</span>
-                    <span class="announcement-dot">✦</span>
-                    <span>Your health and well-being are our priority.</span>
-                    <span class="announcement-dot">✦</span>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <main>
-
-        <!-- HOME SECTION -->
-        <section id="home" class="hero-section">
-
-            <div class="hero-content">
-
-                <p class="eyebrow">
-                    ADVANCED CARE • TRUSTED PEOPLE
-                </p>
-
-                <h1>
-                    Better Care.<br>
-                    <span>Better Life.</span>
-                </h1>
-
-                <p class="hero-text">
-                    Welcome to Syntraxs Hospital, where modern medical
-                    technology meets compassionate care. Our specialists
-                    are here to help you and your family stay healthy
-                    with confidence.
-                </p>
-
-                <div class="hero-buttons">
-
-                    <a href="#book" class="btn primary">
-                        Book Appointment
-                    </a>
-
-                    <a href="#doctors" class="btn secondary">
-                        Meet Our Doctors
-                    </a>
-
-                </div>
-
-            </div>
-
-
-            <div class="hero-card">
-
-                <div class="pulse-icon">
-                    +
-                </div>
-
-                <h3>
-                    24/7 Emergency Care
-                </h3>
-
-                <p>
-                    Immediate medical assistance whenever you need it.
-                </p>
-
-                <div class="emergency">
-                    Emergency:
-                    <strong>+91 98765 43210</strong>
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- ABOUT SECTION -->
-        <section class="about-section">
-
-            <div>
-
-                <p class="eyebrow">
-                    ABOUT SYNTRAXS
-                </p>
-
-                <h2>
-                    Healthcare built around
-                    <span>you.</span>
-                </h2>
-
-            </div>
-
-            <p>
-                Syntraxs Hospital provides dependable healthcare across
-                multiple specialties. From routine consultations to
-                advanced treatment, our team focuses on safe, respectful,
-                patient-first service.
-            </p>
-
-        </section>
-
-
-        <!-- DOCTORS SECTION -->
-        <section id="doctors" class="page-section doctors-section">
-
-            <div class="section-heading">
-
-                <div>
-
-                    <p class="eyebrow">
-                        OUR SPECIALISTS
-                    </p>
-
-                    <h2>
-                        Meet Our Doctors
-                    </h2>
-
-                </div>
-
-                <p>
-                    Experienced specialists dedicated to your health.
-                </p>
-
-            </div>
-
-
-            <!-- Doctor scrolling container -->
-            <div class="doctor-scroller">
-
-
-                <!-- Doctor 1 -->
-                <article class="doctor-card">
-
-                    <div class="doctor-avatar">
-                        DR
-                    </div>
-
-                    <h3>
-                        Dr. Arjun Rao
-                    </h3>
-
-                    <p class="specialty">
-                        Cardiology
-                    </p>
-
-                    <p>
-                        Heart care, hypertension and preventive
-                        cardiology.
-                    </p>
-
-                    <span>
-                        15+ Years Experience
-                    </span>
-
-                </article>
-
-
-                <!-- Doctor 2 -->
-                <article class="doctor-card">
-
-                    <div class="doctor-avatar avatar-two">
-                        DR
-                    </div>
-
-                    <h3>
-                        Dr. Priya Sharma
-                    </h3>
-
-                    <p class="specialty">
-                        Neurology
-                    </p>
-
-                    <p>
-                        Brain, nerve and neurological disorder
-                        treatment.
-                    </p>
-
-                    <span>
-                        12+ Years Experience
-                    </span>
-
-                </article>
-
-
-                <!-- Doctor 3 -->
-                <article class="doctor-card">
-
-                    <div class="doctor-avatar avatar-three">
-                        DR
-                    </div>
-
-                    <h3>
-                        Dr. Vikram Singh
-                    </h3>
-
-                    <p class="specialty">
-                        Orthopedics
-                    </p>
-
-                    <p>
-                        Bone, joint, sports injury and
-                        rehabilitation care.
-                    </p>
-
-                    <span>
-                        14+ Years Experience
-                    </span>
-
-                </article>
-
-
-                <!-- Doctor 4 -->
-                <article class="doctor-card">
-
-                    <div class="doctor-avatar avatar-four">
-                        DR
-                    </div>
-
-                    <h3>
-                        Dr. Ananya Patel
-                    </h3>
-
-                    <p class="specialty">
-                        Pediatrics
-                    </p>
-
-                    <p>
-                        Complete healthcare for infants,
-                        children and teens.
-                    </p>
-
-                    <span>
-                        10+ Years Experience
-                    </span>
-
-                </article>
-
-
-                <!-- Doctor 5 -->
-                <article class="doctor-card">
-
-                    <div class="doctor-avatar avatar-five">
-                        DR
-                    </div>
-
-                    <h3>
-                        Dr. Rahul Mehta
-                    </h3>
-
-                    <p class="specialty">
-                        Dermatology
-                    </p>
-
-                    <p>
-                        Skin, hair and cosmetic dermatology
-                        consultations.
-                    </p>
-
-                    <span>
-                        11+ Years Experience
-                    </span>
-
-                </article>
-
-            </div>
-
-        </section>
-
-
-        <!-- BOOK APPOINTMENT -->
-        <section id="book" class="page-section booking-section">
-
-            <div class="section-heading">
-
-                <div>
-
-                    <p class="eyebrow">
-                        ONLINE APPOINTMENT
-                    </p>
-
-                    <h2>
-                        Book an Appointment
-                    </h2>
-
-                </div>
-
-                <p>
-                    Choose a doctor, tell us your concern and
-                    select a convenient time.
-                </p>
-
-            </div>
-
-
-            <div class="booking-layout">
-
-
-                <!-- Appointment Form -->
-                <form id="appointmentForm" class="booking-form">
-
-                    <label for="patientName">
-                        Patient Name
-                    </label>
-
-                    <input
-                        id="patientName"
-                        type="text"
-                        placeholder="Enter patient name"
-                        required
-                    >
-
-
-                    <label for="doctorSelect">
-                        Choose Doctor
-                    </label>
-
-                    <select id="doctorSelect" required>
-
-                        <option value="">
-                            Select a doctor
-                        </option>
-
-                        <option>
-                            Dr. Arjun Rao — Cardiology
-                        </option>
-
-                        <option>
-                            Dr. Priya Sharma — Neurology
-                        </option>
-
-                        <option>
-                            Dr. Vikram Singh — Orthopedics
-                        </option>
-
-                        <option>
-                            Dr. Ananya Patel — Pediatrics
-                        </option>
-
-                        <option>
-                            Dr. Rahul Mehta — Dermatology
-                        </option>
-
-                    </select>
-
-
-                    <label for="problem">
-                        Patient Problem
-                    </label>
-
-                    <textarea
-                        id="problem"
-                        rows="4"
-                        placeholder="Describe the patient's problem"
-                        required
-                    ></textarea>
-
-
-                    <div class="form-row">
-
-                        <div>
-
-                            <label for="date">
-                                Appointment Date
-                            </label>
-
-                            <input
-                                id="date"
-                                type="date"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div>
-
-                            <label for="time">
-                                Appointment Time
-                            </label>
-
-                            <select id="time" required>
-
-                                <option value="">
-                                    Select time
-                                </option>
-
-                                <option>
-                                    09:00 AM
-                                </option>
-
-                                <option>
-                                    10:30 AM
-                                </option>
-
-                                <option>
-                                    12:00 PM
-                                </option>
-
-                                <option>
-                                    02:00 PM
-                                </option>
-
-                                <option>
-                                    04:30 PM
-                                </option>
-
-                                <option>
-                                    06:00 PM
-                                </option>
-
-                            </select>
-
-                        </div>
-
-                    </div>
-
-
-                    <button
-                        type="submit"
-                        class="btn primary full"
-                    >
-                        Confirm Appointment
-                    </button>
-
-                </form>
-
-
-                <!-- Booking Information -->
-                <div class="booking-info">
-
-                    <div class="info-icon">
-                        ✓
-                    </div>
-
-                    <h3>
-                        Simple & Secure
-                    </h3>
-
-                    <p>
-                        Your appointment details are collected
-                        only to help organize your visit.
-                    </p>
-
-
-                    <div class="info-line">
-                        <strong>1</strong>
-                        Select a specialist
-                    </div>
-
-                    <div class="info-line">
-                        <strong>2</strong>
-                        Explain the problem
-                    </div>
-
-                    <div class="info-line">
-                        <strong>3</strong>
-                        Choose date & time
-                    </div>
-
-                    <div class="info-line">
-                        <strong>4</strong>
-                        Receive confirmation
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- Success Message -->
-            <div
-                id="successMessage"
-                class="success-message"
-            >
-
-                <div class="success-check">
-                    ✓
-                </div>
-
-                <div>
-
-                    <h3>
-                        Appointment Booked Successfully!
-                    </h3>
-
-                    <p id="confirmationText">
-                        Your appointment has been confirmed.
-                    </p>
-
-                </div>
-
-            </div>
-
-        </section>
-        <!-- VIEW APPOINTMENTS SECTION -->
-<section id="appointments" class="page-section appointments-section">
-
-    <div class="section-heading">
-
+    
+    <main id="homePage">
+      <section class="hero">
         <div>
-
-            <p class="eyebrow">
-                PATIENT APPOINTMENTS
-            </p>
-
-            <h2>
-                View Appointments
-            </h2>
-
+          <div class="eyebrow">Care that moves you forward</div>
+          <h1>Better care.<br><em>Brighter futures.</em></h1>
+          <p>
+            World-class specialists, personalized patient care, and cutting-edge medical treatments, brought together under one roof for your health and well-being.
+          </p>
+          <div class="heroactions">
+            <button class="primary" onclick="go('departments')">
+              Explore departments →
+            </button>
+            <button class="secondary" onclick="go('doctors')">
+              Meet our specialists
+            </button>
+          </div>
+          <div class="metrics">
+            <div class="metric"><strong>24</strong><small>Departments</small></div>
+            <div class="metric"><strong>72</strong><small>Doctor profiles</small></div>
+            <div class="metric"><strong>24/7</strong><small>Emergency support concept</small></div>
+          </div>
         </div>
-
-        <p>
-            View all appointments booked through Syntaxs Hospital.
-        </p>
-
-    </div>
-
-
-    <div id="appointmentsList" class="appointments-list">
-
-        <div class="empty-appointments">
-
-            <div class="empty-icon">
-                📅
-            </div>
-
-            <h3>
-                No Appointments Yet
-            </h3>
-
-            <p>
-                Book an appointment and it will appear here.
-            </p>
-
-            <a href="#book" class="btn primary">
-                Book Appointment
-            </a>
-
+        <div class="heroart">
+          <div class="orb"><div class="cross">✚</div></div>
         </div>
+      </section>
 
-    </div>
+      <section class="section">
+        <div class="sectionhead">
+          <div>
+            <div class="eyebrow">Care for every need</div>
+            <h2>Explore our departments</h2>
+          </div>
+          <button class="secondary" onclick="go('departments')">View all →</button>
+        </div>
+        <div class="deptgrid" id="homeDepts"></div>
+      </section>
 
-</section>
+      <section class="section">
+        <div class="sectionhead">
+          <div>
+            <div class="eyebrow">People behind your care</div>
+            <h2>Meet our specialists</h2>
+          </div>
+          <button class="secondary" onclick="go('doctors')">All doctors →</button>
+        </div>
+        <div class="doctors" id="homeDoctors"></div>
+      </section>
 
+      <section class="section">
+        <div class="panel">
+          <h2>Appointments made simple</h2>
+          <p>Book a consultation and review your saved appointments.</p>
+          <button class="primary" onclick="go('appointments')">
+            Book or check appointments →
+          </button>
+        </div>
+      </section>
 
-        <!-- BILL SECTION -->
-        <section id="bill" class="page-section bill-section">
-
-            <div class="section-heading">
-
-                <div>
-
-                    <p class="eyebrow">
-                        PATIENT BILLING
-                    </p>
-
-                    <h2>
-                        Bill & Payment
-                    </h2>
-
-                </div>
-
-                <p>
-                    View your hospital bill and payment details.
-                </p>
-
-            </div>
-
-
-            <div class="bill-card">
-
-                <div class="bill-header">
-
-                    <div>
-
-                        <small>
-                            SYNTRAXS HOSPITAL
-                        </small>
-
-                        <h3>
-                            Patient Bill
-                        </h3>
-
-                    </div>
-
-                    <span class="bill-status">
-                        PENDING
-                    </span>
-
-                </div>
-
-
-                <div class="bill-row">
-
-                    <span>
-                        Consultation
-                    </span>
-
-                    <strong>
-                        ₹800
-                    </strong>
-
-                </div>
-
-
-                <div class="bill-row">
-
-                    <span>
-                        Doctor Fee
-                    </span>
-
-                    <strong>
-                        ₹1,200
-                    </strong>
-
-                </div>
-
-
-                <div class="bill-row">
-
-                    <span>
-                        Service Charges
-                    </span>
-
-                    <strong>
-                        ₹300
-                    </strong>
-
-                </div>
-
-
-                <div class="bill-total">
-
-                    <span>
-                        Total
-                    </span>
-
-                    <strong>
-                        ₹2,300
-                    </strong>
-
-                </div>
-
-
-                <button
-                    class="btn secondary"
-                    onclick="openBillingPage()"
-                >
-                    Pay Bill
-                </button>
-
-            </div>
-
-            <!-- PAYMENT METHOD PAGE -->
-            <div id="billingPage" class="billing-panel" hidden>
-                <button type="button" class="payment-back" onclick="closeBillingPage()">← Back to Bill</button>
-                <h3>Choose Payment Method</h3>
-                <p class="payment-amount">Amount to Pay: ₹2,300</p>
-
-                <form id="paymentForm">
-                    <label class="payment-option">
-                        <input type="radio" name="paymentMethod" value="UPI" required>
-                        <span class="payment-symbol">▦</span>
-                        <span><strong>UPI</strong><small>Choose UPI as your payment method</small></span>
-                    </label>
-
-                    <label class="payment-option">
-                        <input type="radio" name="paymentMethod" value="Card" required>
-                        <span class="payment-symbol">▰</span>
-                        <span><strong>Debit / Credit Card</strong><small>Choose card as your payment method</small></span>
-                    </label>
-
-                    <label class="payment-option">
-                        <input type="radio" name="paymentMethod" value="Cash" required>
-                        <span class="payment-symbol">₹</span>
-                        <span><strong>Cash</strong><small>Pay at the hospital billing counter</small></span>
-                    </label>
-
-                    <div id="paymentExtraFields"></div>
-                    <button type="submit" class="btn primary full">Confirm Payment</button>
-                </form>
-                <p class="payment-note">Demo only. This website does not process real UPI or card payments.</p>
-            </div>
-
-            <!-- PAYMENT CONFIRMATION -->
-            <div id="paymentSuccess" class="payment-success" role="status" aria-live="polite" hidden>
-                <div class="payment-success-icon">✓</div>
-                <div>
-                    <h3>Payment Successful!</h3>
-                    <p id="paymentSuccessText"></p>
-                    <p class="payment-redirect">Returning to Home in 4 seconds...</p>
-                    <button type="button" class="btn primary" onclick="returnHomeNow()">Return to Home Now</button>
-                </div>
-            </div>
-
-        </section>
-
+      <section class="banner">
+        <div>
+          <h2>Your health shouldn't have to wait.</h2>
+          <p>Review  Your Bill</p>
+        </div>
+        <button class="secondary" onclick="go('billing')">Open billing →</button>
+      </section>
     </main>
 
-
-    <!-- FOOTER -->
-    <footer>
-
-        <div class="logo">
-            SYN<span>TRA</span>XS
+    <main id="directoryPage" class="section hide">
+      <div class="sectionhead">
+        <div>
+          <div class="eyebrow">Find your care team</div>
+          <h2 id="directoryTitle">Departments & specialists</h2>
         </div>
+      </div>
 
-        <p>
-            © 2026 Syntraxs Hospital. Designed for better healthcare.
-        </p>
+      <div class="searchbar">
+        <input id="searchInput" placeholder="Search doctors or departments..."
+               oninput="renderDirectory()">
+        <select id="deptFilter" onchange="renderDirectory()">
+          <option value="all">All departments</option>
+        </select>
+        <select id="sortFilter" onchange="renderDirectory()">
+          <option value="name">Sort by name</option>
+          <option value="fee">Sort by fee</option>
+          <option value="experience">Sort by experience</option>
+        </select>
+      </div>
+
+      <div class="deptgrid" id="allDepts"></div>
+      <h2>Available doctors</h2>
+      <div class="doctors" id="allDoctors"></div>
+    </main>
+
+    <main id="profilePage" class="page hide">
+      <button class="back" onclick="go('doctors')">← Back to doctors</button>
+      <div id="profileContent"></div>
+    </main>
+
+    <main id="appointmentsPage" class="page hide">
+      <button class="back" onclick="go('home')">← Back to home</button>
+      <h1>Book & check appointments</h1>
+
+      <div class="billlayout">
+        <section class="panel">
+          <h2>Book an appointment</h2>
+
+          <div class="field">
+            <label>Patient name</label>
+            <input id="appointmentPatient" placeholder="Your full name">
+          </div>
+
+          <div class="field">
+            <label>Department</label>
+            <select id="appointmentDept" onchange="updateAppointmentDoctors()"></select>
+          </div>
+
+          <div class="field">
+            <label>Doctor</label>
+            <select id="appointmentDoctor"></select>
+          </div>
+
+          <div class="field">
+            <label>Date</label>
+            <input id="appointmentDate" type="date">
+          </div>
+
+          <div class="field">
+            <label>Preferred time</label>
+            <select id="appointmentTime">
+              <option>09:00 AM</option>
+              <option>10:00 AM</option>
+              <option>11:00 AM</option>
+              <option>12:00 PM</option>
+              <option>02:00 PM</option>
+              <option>03:00 PM</option>
+              <option>04:00 PM</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Visit type</label>
+            <select id="appointmentVisit">
+              <option>In-person consultation</option>
+              <option>Video consultation </option>
+              <option>Follow-up visit</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Reason for visit</label>
+            <textarea id="appointmentReason" rows="3"></textarea>
+          </div>
+
+          <button class="primary" onclick="saveAppointment()">
+            Confirm appointment
+          </button>
+        </section>
+
+        <section class="panel">
+          <h2>My appointments</h2>
+          <button class="secondary" onclick="renderAppointments()">Refresh</button>
+          <div id="appointmentList"></div>
+        </section>
+      </div>
+    </main>
+
+    <main id="billingPage" class="page hide">
+      <button class="back" onclick="go('home')">← Back to home</button>
+      <h1>Hospital billing</h1>
+
+      <div class="billlayout">
+        <section class="panel">
+          <div class="field">
+            <label>Patient name</label>
+            <input id="patientName" placeholder="Full name">
+          </div>
+
+          <div class="field">
+            <label>Patient ID (optional)</label>
+            <input id="patientId" placeholder="SYN-10482">
+          </div>
+
+          <div class="field">
+            <label>Service</label>
+            <select id="billService" onchange="updateBill()">
+              <option value="consult">Doctor consultation</option>
+              <option value="lab">Laboratory tests</option>
+              <option value="scan">Imaging / scan</option>
+              <option value="room">Room / admission</option>
+              <option value="pharmacy">Pharmacy / medicines</option>
+              <option value="custom">Other service</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Doctor</label>
+            <select id="billDoctor">
+              <option value="">Select doctor</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Additional charges (₹)</label>
+            <input id="extraCharge" type="number" min="0" value="0"
+                   oninput="updateBill()">
+          </div>
+
+          <div class="field">
+            <label>Payment method</label>
+            <select id="payMethod">
+              <option>UPI </option>
+              <option>Credit / debit card </option>
+              <option>Net banking </option>
+              <option>Pay at hospital</option>
+            </select>
+          </div>
+
+          <p class="notice">
+            Check your Bill
+          </p>
+        </section>
+
+        <section class="panel">
+          <h2>Bill summary</h2>
+          <div class="billrow"><span>Service charge</span><strong id="servicePrice"></strong></div>
+          <div class="billrow"><span>Facility fee</span><strong id="facilityPrice"></strong></div>
+          <div class="billrow"><span>Additional charges</span><strong id="extraPrice"></strong></div>
+          <div class="billrow"><span>Tax (sample 5%)</span><strong id="taxPrice"></strong></div>
+          <div class="billrow"><span>Total payable</span><strong class="total" id="totalPrice"></strong></div>
+          <button class="primary" onclick="payBill()">Complete  payment →</button>
+        </section>
+      </div>
+    </main>
+
+    <main id="receiptPage" class="page hide">
+      <section class="panel center">
+        <h1>Thank you!</h1>
+        <p>Your  receipt is ready. </p>
+        <div id="receiptDetails"></div>
+        <button class="primary" onclick="go('home')">Return to home →</button>
+      </section>
+    </main>
+
+    <footer class="footer">
+      Syntraxs Hospital · Care, connected. People, first.
 
     </footer>
+  </div>
 
-
-    <script src="script.js"></script>
-
+  <script src="script.js"></script>
 </body>
 </html>
