@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Syntraxs Hospital</title>
-  <link rel="stylesheet" href="medical.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="app">
@@ -21,6 +21,7 @@
         <button data-nav="doctors">Our Doctors</button>
         <button data-nav="appointments">Appointments</button>
         <button data-nav="billing">Billing</button>
+        <button data-nav="admin">Admin</button>
       </nav>
 
       <button class="primary" onclick="go('appointments')">
@@ -272,6 +273,202 @@
         <button class="primary" onclick="go('home')">Return to home →</button>
       </section>
     </main>
+
+
+<main id="adminPage" class="page hide">
+  <div class="admin-header">
+    <div>
+      <div class="eyebrow">SYNTRAXS HOSPITAL / ADMINISTRATION</div>
+      <h1>Admin Dashboard</h1>
+      <p>Manage doctors, appointments, departments and billing.</p>
+    </div>
+    <button class="secondary" onclick="go('home')">
+      ← Back to website
+    </button>
+  </div>
+
+  <div class="admin-stats">
+    <div class="panel admin-stat">
+      <span>Total Doctors</span>
+      <h2 id="adminDoctorCount">0</h2>
+      <small>Registered profiles</small>
+    </div>
+    <div class="panel admin-stat">
+      <span>Departments</span>
+      <h2 id="adminDeptCount">0</h2>
+      <small>Hospital specialties</small>
+    </div>
+    <div class="panel admin-stat">
+      <span>Appointments</span>
+      <h2 id="adminAppointmentCount">0</h2>
+      <small>All saved bookings</small>
+    </div>
+    <div class="panel admin-stat">
+      <span>Recorded Revenue</span>
+      <h2 id="adminRevenue">₹0</h2>
+      <small>Demo billing records</small>
+    </div>
+  </div>
+
+  <div class="admin-tabs">
+    <button class="admin-tab active" onclick="showAdminTab('overview',this)">Overview</button>
+    <button class="admin-tab" onclick="showAdminTab('doctors',this)">Doctors</button>
+    <button class="admin-tab" onclick="showAdminTab('appointments',this)">Appointments</button>
+    <button class="admin-tab" onclick="showAdminTab('departments',this)">Departments</button>
+    <button class="admin-tab" onclick="showAdminTab('billing',this)">Billing</button>
+  </div>
+
+  <section id="adminOverview" class="admin-content">
+    <div class="panel admin-section">
+      <div class="sectionhead">
+        <div>
+          <div class="eyebrow">Recent activity</div>
+          <h2>Recent appointments</h2>
+        </div>
+        <button class="secondary" onclick="showAdminTab('appointments')">
+          View all →
+        </button>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>Doctor</th>
+              <th>Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="adminRecentRows"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel admin-section">
+      <h2>Quick actions</h2>
+      <div class="admin-actions">
+        <button class="primary" onclick="showAdminTab('doctors')">+ Add doctor</button>
+        <button class="secondary" onclick="showAdminTab('appointments')">Manage bookings</button>
+        <button class="secondary" onclick="showAdminTab('billing')">Review billing</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="adminDoctors" class="admin-content hide">
+    <div class="panel admin-section">
+      <h2>Add a doctor</h2>
+      <form id="adminDoctorForm" class="admin-form">
+        <div class="field">
+          <label>Doctor name</label>
+          <input id="newDoctorName" required placeholder="Dr. Full Name">
+        </div>
+        <div class="field">
+          <label>Department</label>
+          <select id="newDoctorDept" required></select>
+        </div>
+        <div class="field">
+          <label>Qualifications</label>
+          <input id="newDoctorQual" required placeholder="MBBS, MD">
+        </div>
+        <div class="field">
+          <label>Experience (years)</label>
+          <input id="newDoctorExp" type="number" min="0" max="70" value="5" required>
+        </div>
+        <div class="field">
+          <label>Consultation fee (₹)</label>
+          <input id="newDoctorFee" type="number" min="0" value="800" required>
+        </div>
+        <div class="field">
+          <label>Medical education</label>
+          <input id="newDoctorEducation" placeholder="Medical college">
+        </div>
+        <button class="primary" type="submit">Add doctor +</button>
+      </form>
+    </div>
+
+    <div class="panel admin-section">
+      <div class="sectionhead">
+        <h2>Doctor directory</h2>
+        <input id="adminDoctorSearch" placeholder="Search doctors..." oninput="renderAdminDoctors()">
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Department</th>
+              <th>Experience</th>
+              <th>Fee</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminDoctorRows"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="adminAppointments" class="admin-content hide">
+    <div class="panel admin-section">
+      <div class="sectionhead">
+        <h2>Appointment management</h2>
+        <button class="secondary" onclick="renderAdmin()">Refresh</button>
+      </div>
+      <input id="adminAppointmentSearch" class="admin-search"
+             placeholder="Search patient or doctor..."
+             oninput="renderAdminAppointments()">
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Patient</th>
+              <th>Doctor</th>
+              <th>Department</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminAppointmentRows"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="adminDepartments" class="admin-content hide">
+    <div class="panel admin-section">
+      <h2>Hospital departments</h2>
+      <p>Browse specialties and their associated doctor counts.</p>
+      <div id="adminDepartmentGrid" class="deptgrid"></div>
+    </div>
+  </section>
+
+  <section id="adminBilling" class="admin-content hide">
+    <div class="panel admin-section">
+      <div class="sectionhead">
+        <h2>Billing records</h2>
+        <button class="secondary" onclick="renderAdminBilling()">Refresh</button>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Receipt</th>
+              <th>Patient</th>
+              <th>Service</th>
+              <th>Doctor</th>
+              <th>Amount</th>
+              <th>Method</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="adminBillingRows"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
 
     <footer class="footer">
       Syntraxs Hospital · Care, connected. People, first.
